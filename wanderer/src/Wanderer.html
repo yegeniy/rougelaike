@@ -27,6 +27,7 @@
 </div>
 
 <div id="additional-info" style="position:absolute; top: 0px; right: 5px; max-width: 40%;">
+  <pre id="tsv" style="overflow: hidden"></pre>
   <!-- <h3>
     Wanderer v2.1
   </h3>
@@ -3759,6 +3760,13 @@ function displayMap(findPlayer=false, findTreasure=false){
  // Print everything on screen:
  document.getElementById("mapText").innerHTML = displayString;
  document.getElementById("statusLine").innerHTML = names+"<br />"+attributes+"<br />"+equipped+"<br />"+states+msg;
+
+ // While we could scrape the state, for now let's just build it up manually.
+ // TODO: this is just the map. Could probably include the rest of the status?
+ tsv = outputMap.map(function(el) {return el.join("\t");}).join("\t") +
+      [names, attributes, equipped, states, msg].join("\t") +
+      "\t" + ""; // the user's move is filled in
+ document.getElementById("tsv").innerHTML = tsv;
 }
 
 function mapTreasureOnto(outputMap) {
@@ -3781,7 +3789,7 @@ function mapTreasureOnto(outputMap) {
   for (var i = 0; i < mapWidth; i++) {
    for (var j = 0; j < mapWidth; j++) {
     if (stepsTo(tx, ty, i, j) == 10 && !legend.includes(outputMap[i][j])) {
-     outputMap[i][j] = t == 0 ? '+' :'˙';
+     outputMap[i][j] = t == 0 ? '+' : '.';
     }
    }
   }
@@ -3839,7 +3847,11 @@ document.onkeydown = function(e) {
         case 18: // Alt (Option)
          displayMap(false, true);
          break;
+        default:
+         return;
     }
+    // The tsv is reset in displayMap.
+    document.getElementById("tsv").innerHTML += e.keyCode;
 };
 
 document.onkeyup = function(e) {
