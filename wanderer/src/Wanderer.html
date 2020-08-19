@@ -3764,8 +3764,7 @@ function displayMap(findPlayer=false, findTreasure=false){
  // While we could scrape the state, for now let's just build it up manually.
  // TODO: this is just the map. Could probably include the rest of the status?
  tsv = outputMap.map(function(el) {return el.join("\t");}).join("\t") +
-      [names, attributes, equipped, states, msg].join("\t") +
-      "\t" + ""; // the user's move is filled in
+      [names, attributes, equipped, states, msg].join("\t");
  document.getElementById("tsv").innerHTML = tsv;
 }
 
@@ -3850,8 +3849,6 @@ document.onkeydown = function(e) {
         default:
          return;
     }
-    // The tsv is reset in displayMap.
-    document.getElementById("tsv").innerHTML += e.keyCode;
 };
 
 document.onkeyup = function(e) {
